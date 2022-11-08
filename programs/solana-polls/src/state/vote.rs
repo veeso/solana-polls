@@ -3,7 +3,7 @@
 use anchor_lang::prelude::*;
 
 /// Represents a vote to a poll
-#[account]
+#[derive(PartialEq, Eq, Debug, Clone, AnchorSerialize, AnchorDeserialize)]
 pub struct Vote {
     /// Poll id
     poll_id: u64,

@@ -5,6 +5,7 @@
   - [Approaching Solana development](#approaching-solana-development)
     - [Dependencies](#dependencies)
     - [Environment](#environment)
+    - [Testing](#testing)
 
 ---
 
@@ -59,3 +60,13 @@ These are the steps required to get started with Solana:
 3. Give yourself some coins
 
     ```solana airdrop 2```
+
+### Testing
+
+1. Setup localhost network
+
+    ```solana config set --url localhost```
+
+2. Run test validator
+
+    ```solana-test-validator```

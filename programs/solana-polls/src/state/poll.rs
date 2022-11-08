@@ -3,7 +3,7 @@
 use anchor_lang::prelude::*;
 
 /// The poll defines a poll created by the user with its options and title
-#[account]
+#[derive(PartialEq, Eq, Debug, AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct Poll {
     /// Poll id
     pub id: u64,
@@ -12,7 +12,7 @@ pub struct Poll {
     /// Poll title
     pub title: String,
     /// Poll options (id, text)
-    pub options: Vec<(u64, String)>,
+    pub options: Vec<Option>,
     /// Is the poll closed
     pub closed: bool,
 }
@@ -27,7 +27,7 @@ impl Poll {
             options: options
                 .into_iter()
                 .enumerate()
-                .map(|(i, opt)| (i as u64, opt))
+                .map(|(i, opt)| Option::new(i as u64, opt))
                 .collect(),
             closed: false,
         }
@@ -39,6 +39,17 @@ impl Poll {
     }
 }
 
+#[derive(PartialEq, Eq, Debug, AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct Option {
+    pub id: u64,
+    pub text: String,
+}
+
+impl Option {
+    pub fn new(id: u64, text: String) -> Self {
+        Self { id, text }
+    }
+}
 #[cfg(test)]
 mod test {
 
@@ -60,7 +71,10 @@ mod test {
         assert_eq!(poll.title.as_str(), "Solana or Ethereum?");
         assert_eq!(
             poll.options,
-            vec![(0, "Solana".to_string()), (1, "Ethereum".to_string())]
+            vec![
+                Option::new(0, "Solana".to_string()),
+                Option::new(1, "Ethereum".to_string())
+            ]
         );
         assert_eq!(poll.closed, false);
     }

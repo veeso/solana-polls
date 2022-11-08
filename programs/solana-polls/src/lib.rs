@@ -55,7 +55,7 @@ pub struct Initialize<'info> {
         payer = owner,
         space = 8 // account discriminator
         + 32 // pubkey
-        + (1024 * 1024 * 1024 * 8) // space reserved to poll
+        + (1024 * 8) // 8KB
     )]
     pub data: Account<'info, Data>,
     #[account(mut)]

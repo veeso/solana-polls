@@ -60,7 +60,7 @@ impl Data {
             return Err(PollError::PollClosed);
         }
         // check if option exists
-        if !poll.options.iter().any(|(i, _)| *i == option) {
+        if !poll.options.iter().any(|x| x.id == option) {
             return Err(PollError::NoSuchOption);
         }
         // register vote
