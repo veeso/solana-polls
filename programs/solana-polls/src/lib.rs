@@ -32,7 +32,7 @@ pub mod solana_polls {
     }
 
     /// Close poll
-    pub fn close_poll(ctx: Context<ClosePoll>, poll_id: u64) -> Result<()> {
+    pub fn close_poll(ctx: Context<ClosePoll>, poll_id: u32) -> Result<()> {
         let data = &mut ctx.accounts.data;
         data.close_poll(ctx.accounts.author.key(), poll_id)?;
 
@@ -40,7 +40,7 @@ pub mod solana_polls {
     }
 
     /// Vote poll
-    pub fn vote(ctx: Context<Vote>, poll_id: u64, option: u64) -> Result<()> {
+    pub fn vote(ctx: Context<Vote>, poll_id: u32, option: u32) -> Result<()> {
         let data = &mut ctx.accounts.data;
         data.vote(ctx.accounts.voter.key(), poll_id, option)?;
 

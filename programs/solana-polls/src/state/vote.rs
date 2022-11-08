@@ -6,16 +6,16 @@ use anchor_lang::prelude::*;
 #[derive(PartialEq, Eq, Debug, Clone, AnchorSerialize, AnchorDeserialize)]
 pub struct Vote {
     /// Poll id
-    poll_id: u64,
+    poll_id: u32,
     /// The address which issued the vote
     pub owner: Pubkey,
     /// Option voted
-    pub option: u64,
+    pub option: u32,
 }
 
 impl Vote {
     /// Instantiates a new vote
-    pub fn new(poll_id: u64, owner: Pubkey, option: u64) -> Self {
+    pub fn new(poll_id: u32, owner: Pubkey, option: u32) -> Self {
         Self {
             poll_id,
             owner,
@@ -23,7 +23,7 @@ impl Vote {
         }
     }
 
-    pub fn poll_id(&self) -> u64 {
+    pub fn poll_id(&self) -> u32 {
         self.poll_id
     }
 }

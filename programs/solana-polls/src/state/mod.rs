@@ -31,7 +31,7 @@ impl Data {
         self.polls.push(poll);
     }
 
-    pub fn close_poll(&mut self, account: Pubkey, poll_id: u64) -> PollResult<()> {
+    pub fn close_poll(&mut self, account: Pubkey, poll_id: u32) -> PollResult<()> {
         let poll = match self.get_poll_by_id(poll_id) {
             Some(p) => p,
             None => return Err(PollError::NoSuchPoll),
@@ -48,7 +48,7 @@ impl Data {
     }
 
     /// Try to enregister a vote for provided poll
-    pub fn vote(&mut self, voter: Pubkey, poll_id: u64, option: u64) -> PollResult<()> {
+    pub fn vote(&mut self, voter: Pubkey, poll_id: u32, option: u32) -> PollResult<()> {
         if self.has_already_vote(voter, poll_id) {
             return Err(PollError::AlreadyVoted);
         }
@@ -69,14 +69,14 @@ impl Data {
     }
 
     /// Returns whether an account has already voted
-    fn has_already_vote(&self, voter: Pubkey, poll_id: u64) -> bool {
+    fn has_already_vote(&self, voter: Pubkey, poll_id: u32) -> bool {
         self.votes
             .iter()
             .any(|x| x.poll_id() == poll_id && x.owner == voter)
     }
 
     /// Get next poll id
-    fn next_poll_id(&self) -> u64 {
+    fn next_poll_id(&self) -> u32 {
         if let Some(poll) = self.polls.last() {
             poll.id + 1
         } else {
@@ -85,7 +85,7 @@ impl Data {
     }
 
     /// Get poll by id
-    fn get_poll_by_id(&mut self, id: u64) -> Option<&mut Poll> {
+    fn get_poll_by_id(&mut self, id: u32) -> Option<&mut Poll> {
         self.polls.iter_mut().find(|x| x.id == id)
     }
 }

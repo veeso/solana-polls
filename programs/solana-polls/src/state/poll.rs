@@ -6,7 +6,7 @@ use anchor_lang::prelude::*;
 #[derive(PartialEq, Eq, Debug, AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct Poll {
     /// Poll id
-    pub id: u64,
+    pub id: u32,
     /// Poll owner
     pub owner: Pubkey,
     /// Poll title
@@ -19,7 +19,7 @@ pub struct Poll {
 
 impl Poll {
     /// Instantiate a new Poll
-    pub fn new(id: u64, owner: Pubkey, title: String, options: Vec<String>) -> Self {
+    pub fn new(id: u32, owner: Pubkey, title: String, options: Vec<String>) -> Self {
         Self {
             id,
             owner,
@@ -27,7 +27,7 @@ impl Poll {
             options: options
                 .into_iter()
                 .enumerate()
-                .map(|(i, opt)| Option::new(i as u64, opt))
+                .map(|(i, opt)| Option::new(i as u32, opt))
                 .collect(),
             closed: false,
         }
@@ -41,12 +41,12 @@ impl Poll {
 
 #[derive(PartialEq, Eq, Debug, AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct Option {
-    pub id: u64,
+    pub id: u32,
     pub text: String,
 }
 
 impl Option {
-    pub fn new(id: u64, text: String) -> Self {
+    pub fn new(id: u32, text: String) -> Self {
         Self { id, text }
     }
 }
