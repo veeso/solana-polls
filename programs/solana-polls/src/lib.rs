@@ -64,6 +64,7 @@ pub struct Initialize<'info> {
 }
 
 /// Poll error
+#[derive(PartialEq, Eq)]
 #[error_code]
 pub enum PollError {
     /// The account already voted

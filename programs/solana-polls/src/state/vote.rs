@@ -27,3 +27,20 @@ impl Vote {
         self.poll_id
     }
 }
+
+#[cfg(test)]
+mod test {
+
+    use super::*;
+
+    use pretty_assertions::assert_eq;
+
+    #[test]
+    fn should_create_vote() {
+        let key = Pubkey::new_unique();
+        let vote = Vote::new(0, key, 1);
+        assert_eq!(vote.poll_id(), 0);
+        assert_eq!(vote.option, 1);
+        assert_eq!(vote.owner, key);
+    }
+}

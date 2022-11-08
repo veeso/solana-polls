@@ -38,3 +38,43 @@ impl Poll {
         self.closed = true;
     }
 }
+
+#[cfg(test)]
+mod test {
+
+    use super::*;
+
+    use pretty_assertions::assert_eq;
+
+    #[test]
+    fn should_create_poll() {
+        let key = Pubkey::new_unique();
+        let poll = Poll::new(
+            0,
+            key,
+            "Solana or Ethereum?".to_string(),
+            vec!["Solana".to_string(), "Ethereum".to_string()],
+        );
+        assert_eq!(poll.id, 0);
+        assert_eq!(poll.owner, key);
+        assert_eq!(poll.title.as_str(), "Solana or Ethereum?");
+        assert_eq!(
+            poll.options,
+            vec![(0, "Solana".to_string()), (1, "Ethereum".to_string())]
+        );
+        assert_eq!(poll.closed, false);
+    }
+
+    #[test]
+    fn should_close_poll() {
+        let key = Pubkey::new_unique();
+        let mut poll = Poll::new(
+            0,
+            key,
+            "Solana or Ethereum?".to_string(),
+            vec!["Solana".to_string(), "Ethereum".to_string()],
+        );
+        poll.close();
+        assert_eq!(poll.closed, true);
+    }
+}
