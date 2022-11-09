@@ -3,10 +3,9 @@ import { hot } from "react-hot-loader/root";
 import styled from "styled-components";
 
 const Button = styled.button`
-  background-color: rgb(6, 127, 150);
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-radius: 5rem;
+  background-color: #512da8;
+  border: 0px solid #aaa;
+  border-radius: 0.5rem;
   color: white;
   cursor: pointer;
   letter-spacing: 2px;
@@ -15,10 +14,10 @@ const Button = styled.button`
   height: 3rem;
   padding: 0 3.5rem;
   text-align: center;
-  text-transform: uppercase;
+  text-transform: capitalize;
 
   :hover {
-    background-color: rgb(3, 104, 120);
+    background-color: #222;
   }
 
   :disabled {

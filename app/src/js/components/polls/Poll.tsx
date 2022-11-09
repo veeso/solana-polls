@@ -6,10 +6,15 @@ import PollEntity from "../../lib/poll";
 import Submit from "../form/Submit";
 
 const Row = styled.div`
+  border-bottom: 2px solid #ccc;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 24px 0;
+  padding: 12px 0;
+
+  :nth-child(even) {
+    background-color: #eee;
+  }
 `;
 
 const Title = styled.div`
@@ -38,7 +43,7 @@ class Poll extends React.Component<Props> {
           <span>{this.props.poll.title}</span>
         </Title>
         <Cta>
-          <Submit onClick={this.props.onShowResult} text="Show result" />
+          <Submit onClick={this.props.onShowResult} text="Show results" />
         </Cta>
         <Cta>
           <Submit

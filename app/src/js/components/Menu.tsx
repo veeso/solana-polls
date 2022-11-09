@@ -9,6 +9,7 @@ import Logo from "./menu/Logo";
 const Header = styled.header`
   align-items: center;
   background-color: white;
+  border-bottom: 1px solid #ccc;
   color: #202020;
   display: flex;
   font-size: 1.5em;
@@ -19,6 +20,14 @@ const Header = styled.header`
 const LogoSection = styled.div`
   padding: 0 24px;
   text-align: left;
+`;
+
+const Title = styled.h1`
+  display: inline-block;
+  color: #444;
+  font-size: 1.2em;
+  font-weight: 100;
+  margin-left: 24px;
 `;
 
 const LinkSection = styled.div`
@@ -37,6 +46,7 @@ class Menu extends React.Component {
       <Header>
         <LogoSection>
           <Logo />
+          <Title>Solana Polls</Title>
         </LogoSection>
         <LinkSection>
           <Link route="" text="Polls"></Link>

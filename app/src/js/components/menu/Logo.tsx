@@ -3,6 +3,7 @@ import { hot } from "react-hot-loader/root";
 import styled from "styled-components";
 
 const Container = styled.div`
+  display: inline-block;
   padding: 24px 0;
 `;
 
