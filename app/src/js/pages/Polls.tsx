@@ -19,9 +19,6 @@ enum PageState {
   Results,
   Vote,
 }
-
-interface Props {}
-
 interface States {
   polls: Array<PollEntity>;
   votes: Map<number, Array<VoteEntity>>;
@@ -29,68 +26,47 @@ interface States {
   pageState: PageState;
 }
 
-class Polls extends React.Component<Props, States> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      polls: [],
-      votes: new Map(),
-      selectedPoll: null,
-      pageState: PageState.Polls,
-    };
-    this.loadVotes = this.loadVotes.bind(this);
-    this.handleShowResult = this.handleShowResult.bind(this);
-    this.handleVote = this.handleVote.bind(this);
-    this.handleGoback = this.handleGoback.bind(this);
-    this.handleVoteSubmit = this.handleVoteSubmit.bind(this);
-  }
+const Polls = () => {
+  const [polls, setPolls] = React.useState<Array<PollEntity>>([]);
+  const [votes, setVotes] = React.useState<Map<number, Array<VoteEntity>>>(
+    new Map()
+  );
+  const [selectedPoll, setSelectedPoll] = React.useState<number | null>(null);
+  const [pageState, setPageState] = React.useState<PageState>(PageState.Polls);
 
-  componentDidMount(): void {
-    this.loadPolls();
-  }
-
-  /**
-   * @description load polls from blockchain
-   */
-  loadPolls() {
-    this.setState({
-      polls: [
-        {
-          id: 0,
-          title: "If you had 10,000$, what crypto would you invest in?",
-          closed: false,
-          options: [
-            { id: 0, text: "BTC" },
-            { id: 1, text: "ETH" },
-            { id: 2, text: "SOL" },
-            { id: 3, text: "DOGE" },
-            { id: 4, text: "MATIC" },
-          ],
-        },
-        {
-          id: 1,
-          title: "What is the best programming language to learn in 2023?",
-          closed: true,
-          options: [
-            { id: 0, text: "Rust" },
-            { id: 1, text: "Go" },
-            { id: 2, text: "Solidity" },
-            { id: 3, text: "Elm" },
-            { id: 4, text: "Typescript" },
-          ],
-        },
-      ],
-    });
+  const loadPolls = () => {
+    setPolls([
+      {
+        id: 0,
+        title: "If you had 10,000$, what crypto would you invest in?",
+        closed: false,
+        options: [
+          { id: 0, text: "BTC" },
+          { id: 1, text: "ETH" },
+          { id: 2, text: "SOL" },
+          { id: 3, text: "DOGE" },
+          { id: 4, text: "MATIC" },
+        ],
+      },
+      {
+        id: 1,
+        title: "What is the best programming language to learn in 2023?",
+        closed: true,
+        options: [
+          { id: 0, text: "Rust" },
+          { id: 1, text: "Go" },
+          { id: 2, text: "Solidity" },
+          { id: 3, text: "Elm" },
+          { id: 4, text: "Typescript" },
+        ],
+      },
+    ]);
     //TODO: load from blockchain
-  }
+  };
 
-  /**
-   * @description load votes for provided poll
-   * @param pollId
-   */
-  loadVotes(pollId: number) {
-    let votes = this.state.votes;
-    let availableOptions = this.state.polls
+  const loadVotes = (pollId: number) => {
+    let newVotes = votes;
+    let availableOptions = polls
       .find((poll) => poll.id === pollId)
       ?.options.reduce((prev, current) => {
         if (prev.id < current.id) {
@@ -105,86 +81,89 @@ class Polls extends React.Component<Props, States> {
         option: Math.floor(Math.random() * availableOptions),
       });
     }
-    votes.set(pollId, votedOptions);
+    newVotes.set(pollId, votedOptions);
     // TODO: load from blockchain
-    this.setState({ votes });
-  }
+    setVotes(newVotes);
+  };
 
-  handleShowResult(pollId: number) {
+  const handleShowResult = (pollId: number) => {
     console.log(`show results for ${pollId}`);
     // load votes if unloaded
-    if (!this.state.votes.has(pollId)) {
-      this.loadVotes(pollId);
+    if (!votes.has(pollId)) {
+      loadVotes(pollId);
     }
-    this.setState({ selectedPoll: pollId, pageState: PageState.Results });
-  }
+    setSelectedPoll(pollId);
+    setPageState(PageState.Results);
+  };
 
-  handleVote(id: number) {
+  const handleVote = (id: number) => {
     console.log(`load votes for ${id}`);
-    this.setState({ selectedPoll: id, pageState: PageState.Vote });
-  }
+    setSelectedPoll(id);
+    setPageState(PageState.Vote);
+  };
 
-  handleGoback() {
-    this.setState({ selectedPoll: null, pageState: PageState.Polls });
-  }
+  const handleGoback = () => {
+    setSelectedPoll(null);
+    setPageState(PageState.Polls);
+  };
 
-  handleVoteSubmit(option: number) {
+  const handleVoteSubmit = (option: number) => {
     console.log(`voted for option ${option}`);
-  }
+  };
 
-  loadResultVotes(): Array<VoteEntity> {
-    if (this.state.selectedPoll === null) {
+  const loadResultVotes = (): Array<VoteEntity> => {
+    if (selectedPoll === null) {
       return [];
     }
-    const votes = this.state.votes.get(this.state.selectedPoll);
-    if (votes === undefined) {
+    const pollVotes = votes.get(selectedPoll);
+    if (pollVotes === undefined) {
       return [];
     }
-    return votes;
-  }
+    return pollVotes;
+  };
 
-  loadSelectedPoll(): PollEntity | undefined {
-    if (this.state.selectedPoll === null) {
+  const loadSelectedPoll = (): PollEntity | undefined => {
+    if (selectedPoll === null) {
       return undefined;
     }
-    return this.state.polls.find((poll) => poll.id === this.state.selectedPoll);
-  }
+    return polls.find((poll) => poll.id === selectedPoll);
+  };
 
-  renderPolls(): JSX.Element[] {
-    const polls = this.state.polls.map((poll) => (
+  const renderPolls = (): JSX.Element[] => {
+    const pollsElement = polls.map((poll) => (
       <Poll
         key={poll.id}
         poll={poll}
-        onShowResult={() => this.handleShowResult(poll.id)}
-        onVotePoll={() => this.handleVote(poll.id)}
+        onShowResult={() => handleShowResult(poll.id)}
+        onVotePoll={() => handleVote(poll.id)}
       />
     ));
-    return polls;
-  }
+    return pollsElement;
+  };
 
-  renderResults(): JSX.Element {
-    const votes = this.loadResultVotes();
-    const selectedPoll = this.loadSelectedPoll();
-    const pollId = this.state.selectedPoll;
-    if (!selectedPoll || pollId === null) {
-      console.error(`no such poll ${this.state.selectedPoll}`);
+  const renderResults = (): JSX.Element => {
+    const votes = loadResultVotes();
+    const selectedPoll = loadSelectedPoll();
+    const poll = selectedPoll;
+    if (!selectedPoll || poll === undefined) {
+      console.error(`no such poll ${selectedPoll}`);
       return <></>;
     }
     return (
       <Results
         poll={selectedPoll}
-        onVotePoll={() => this.handleVote(pollId)}
-        onGoBack={this.handleGoback}
+        onVotePoll={() => handleVote(poll.id)}
+        onGoBack={handleGoback}
         votes={votes}
       />
     );
-  }
+  };
 
-  renderVoteForm() {
-    const selectedPoll = this.loadSelectedPoll();
-    const pollId = this.state.selectedPoll;
+  const renderVoteForm = () => {
+    const selectedPoll = loadSelectedPoll();
+    const pollId = selectedPoll;
     if (!selectedPoll || pollId === null) {
-      console.error(`no such poll ${this.state.selectedPoll}`);
+      console.error(`no such poll ${selectedPoll}`);
       return <></>;
     }
     if (selectedPoll.closed) {
@@ -194,25 +173,27 @@ class Polls extends React.Component<Props, States> {
     return (
       <Vote
         poll={selectedPoll}
-        onSubmit={this.handleVoteSubmit}
-        onGoBack={this.handleGoback}
+        onSubmit={handleVoteSubmit}
+        onGoBack={handleGoback}
       />
     );
-  }
+  };
 
-  componentToRender(): JSX.Element {
-    if (this.state.pageState === PageState.Polls) {
-      return <>{this.renderPolls()}</>;
-    } else if (this.state.pageState === PageState.Results) {
-      return this.renderResults();
+  const componentToRender = (): JSX.Element => {
+    if (pageState === PageState.Polls) {
+      return <>{renderPolls()}</>;
+    } else if (pageState === PageState.Results) {
+      return renderResults();
     } else {
-      return this.renderVoteForm();
+      return renderVoteForm();
     }
-  }
+  };
 
-  render(): React.ReactNode {
-    return <Container>{this.componentToRender()}</Container>;
-  }
-}
+  React.useEffect(() => {
+    loadPolls();
+  });
+
+  return <Container>{componentToRender()}</Container>;
+};
 
 export default hot(Polls);
