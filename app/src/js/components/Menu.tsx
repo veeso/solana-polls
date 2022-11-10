@@ -47,27 +47,23 @@ const WalletSection = styled.div`
   text-align: right;
 `;
 
-class Menu extends React.Component {
-  render(): React.ReactNode {
-    return (
-      <Header>
-        <LogoSection>
-          <Logo />
-          <Title>Solana Polls</Title>
-        </LogoSection>
-        <LinkSection>
-          <Link route="" text="Polls"></Link>
-          <Link route="new" text="New poll"></Link>
-        </LinkSection>
-        <WalletSection className="wallet-connect">
-          <WalletModalProvider>
-            <WalletMultiButton />
-            <WalletDisconnectButton />
-          </WalletModalProvider>
-        </WalletSection>
-      </Header>
-    );
-  }
-}
+const Menu = () => (
+  <Header>
+    <LogoSection>
+      <Logo />
+      <Title>Solana Polls</Title>
+    </LogoSection>
+    <LinkSection>
+      <Link route="" text="Polls"></Link>
+      <Link route="new" text="New poll"></Link>
+    </LinkSection>
+    <WalletSection className="wallet-connect">
+      <WalletModalProvider>
+        <WalletMultiButton />
+        <WalletDisconnectButton />
+      </WalletModalProvider>
+    </WalletSection>
+  </Header>
+);
 
 export default hot(Menu);

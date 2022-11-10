@@ -191,7 +191,7 @@ const Polls = () => {
 
   React.useEffect(() => {
     loadPolls();
-  });
+  }, []);
 
   return <Container>{componentToRender()}</Container>;
 };

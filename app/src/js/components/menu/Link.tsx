@@ -23,17 +23,15 @@ interface Props {
   text: string;
 }
 
-class Link extends React.Component<Props> {
-  render(): React.ReactNode {
-    const href = `/${this.props.route}`;
-    return (
-      <Container>
-        <Url to={href}>
-          <span>{this.props.text}</span>
-        </Url>
-      </Container>
-    );
-  }
-}
+const Link = (props: Props) => {
+  const href = `/${props.route}`;
+  return (
+    <Container>
+      <Url to={href}>
+        <span>{props.text}</span>
+      </Url>
+    </Container>
+  );
+};
 
 export default hot(Link);

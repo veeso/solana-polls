@@ -9,20 +9,16 @@ interface Props {
   value: string;
 }
 
-class PollTitle extends React.Component<Props> {
-  render(): React.ReactNode {
-    return (
-      <div>
-        <Label for="title" text="Poll question" />
-        <Input
-          name="title"
-          onChange={this.props.onChange}
-          value={this.props.value}
-          width="95%"
-        />
-      </div>
-    );
-  }
-}
+const PollTitle = (props: Props) => (
+  <div>
+    <Label for="title" text="Poll question" />
+    <Input
+      name="title"
+      onChange={props.onChange}
+      value={props.value}
+      width="95%"
+    />
+  </div>
+);
 
 export default hot(PollTitle);

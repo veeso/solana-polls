@@ -32,19 +32,12 @@ interface Props {
   onClick: () => void;
 }
 
-class Submit extends React.Component<Props> {
-  render(): React.ReactNode {
-    return (
-      <div>
-        <Button
-          disabled={this.props.disabled}
-          onClick={() => this.props.onClick()}
-        >
-          {this.props.icon} <span>{this.props.text}</span>
-        </Button>
-      </div>
-    );
-  }
-}
+const Submit = (props: Props) => (
+  <div>
+    <Button disabled={props.disabled} onClick={() => props.onClick()}>
+      {props.icon} <span>{props.text}</span>
+    </Button>
+  </div>
+);
 
 export default hot(Submit);

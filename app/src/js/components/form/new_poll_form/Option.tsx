@@ -20,24 +20,20 @@ interface Props {
   value: string;
 }
 
-class Option extends React.Component<Props> {
-  render(): React.ReactNode {
-    return (
-      <Container>
-        <Name>
-          <span>{this.props.value}</span>
-        </Name>
-        <div>
-          <XMarkIcon
-            width={32}
-            color="black"
-            cursor="pointer"
-            onClick={this.props.onOptionRemoved}
-          />
-        </div>
-      </Container>
-    );
-  }
-}
+const Option = (props: Props) => (
+  <Container>
+    <Name>
+      <span>{props.value}</span>
+    </Name>
+    <div>
+      <XMarkIcon
+        width={32}
+        color="black"
+        cursor="pointer"
+        onClick={props.onOptionRemoved}
+      />
+    </div>
+  </Container>
+);
 
 export default hot(Option);

@@ -8,28 +8,22 @@ import Loading from "./js/pages/Loading";
 import NewPoll from "./js/pages/NewPoll";
 import Polls from "./js/pages/Polls";
 
-interface Props {}
-
-class App extends React.Component<Props> {
-  render() {
-    return (
-      <>
-        <Wallet>
-          <BrowserRouter>
-            <Menu />
-            <main>
-              <React.Suspense fallback={<Loading />}>
-                <Routes>
-                  <Route path="/new" element={<NewPoll />} />
-                  <Route index path="/" element={<Polls />} />
-                </Routes>
-              </React.Suspense>
-            </main>
-          </BrowserRouter>
-        </Wallet>
-      </>
-    );
-  }
-}
+const App = () => (
+  <>
+    <Wallet>
+      <BrowserRouter>
+        <Menu />
+        <main>
+          <React.Suspense fallback={<Loading />}>
+            <Routes>
+              <Route path="/new" element={<NewPoll />} />
+              <Route index path="/" element={<Polls />} />
+            </Routes>
+          </React.Suspense>
+        </main>
+      </BrowserRouter>
+    </Wallet>
+  </>
+);
 
 export default hot(App);

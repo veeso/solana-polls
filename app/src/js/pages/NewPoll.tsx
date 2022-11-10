@@ -9,24 +9,17 @@ const Container = styled.div`
   width: 100%;
 `;
 
-class NewPoll extends React.Component {
-  constructor(props: {}) {
-    super(props);
-    this.handleOnSubmit = this.handleOnSubmit.bind(this);
-  }
-
-  handleOnSubmit(title: string, options: Array<string>) {
+const NewPoll = () => {
+  const handleOnSubmit = (title: string, options: Array<string>) => {
     console.log(`form submit ${title}; ${options}`);
     // TODO: clear form
-  }
+  };
 
-  render(): React.ReactNode {
-    return (
-      <Container>
-        <NewPollForm onSubmit={this.handleOnSubmit} />
-      </Container>
-    );
-  }
-}
+  return (
+    <Container>
+      <NewPollForm onSubmit={handleOnSubmit} />
+    </Container>
+  );
+};
 
 export default hot(NewPoll);

@@ -12,17 +12,13 @@ const Img = styled.img`
   width: auto;
 `;
 
-class Logo extends React.Component {
-  render(): React.ReactNode {
-    return (
-      <Container>
-        <Img
-          src="https://cryptologos.cc/logos/solana-sol-logo.svg?v=023"
-          alt="solana-logo"
-        />
-      </Container>
-    );
-  }
-}
+const Logo = () => (
+  <Container>
+    <Img
+      src="https://cryptologos.cc/logos/solana-sol-logo.svg?v=023"
+      alt="solana-logo"
+    />
+  </Container>
+);
 
 export default hot(Logo);

@@ -21,38 +21,31 @@ interface States {
   option: string;
 }
 
-class NewOptionForm extends React.Component<Props, States> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { option: "" };
-    this.handleNewOptionChange = this.handleNewOptionChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-  }
+const NewOptionForm = (props: Props) => {
+  const [option, setOption] = React.useState<string>("");
 
-  handleNewOptionChange(event: React.FormEvent<EventTarget>) {
-    this.setState({ option: (event.target as HTMLInputElement).value });
-  }
+  const handleNewOptionChange = (event: React.FormEvent<EventTarget>) => {
+    setOption((event.target as HTMLInputElement).value);
+  };
 
-  onSubmit() {
-    this.setState({ option: "" });
-    this.props.onNewOption(this.state.option);
-  }
+  const onSubmit = () => {
+    setOption("");
+    props.onNewOption(option);
+  };
 
-  render(): React.ReactNode {
-    return (
-      <Container>
-        <div>
-          <Label for="new-option" text="New option name" />
-          <Input
-            name="new-option"
-            value={this.state.option}
-            onChange={this.handleNewOptionChange}
-          />
-        </div>
-        <Submit text="Add" onClick={this.onSubmit} />
-      </Container>
-    );
-  }
-}
+  return (
+    <Container>
+      <div>
+        <Label for="new-option" text="New option name" />
+        <Input
+          name="new-option"
+          value={option}
+          onChange={handleNewOptionChange}
+        />
+      </div>
+      <Submit text="Add" onClick={onSubmit} />
+    </Container>
+  );
+};
 
 export default hot(NewOptionForm);

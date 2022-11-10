@@ -13,14 +13,10 @@ interface Props {
   text: string;
 }
 
-class Label extends React.Component<Props> {
-  render(): React.ReactNode {
-    return (
-      <div>
-        <LabelText htmlFor={this.props.for}>{this.props.text}</LabelText>
-      </div>
-    );
-  }
-}
+const Label = (props: Props) => (
+  <div>
+    <LabelText htmlFor={props.for}>{props.text}</LabelText>
+  </div>
+);
 
 export default hot(Label);

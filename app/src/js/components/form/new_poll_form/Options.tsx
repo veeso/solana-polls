@@ -15,23 +15,21 @@ interface Props {
   options: Array<string>;
 }
 
-class Options extends React.Component<Props> {
-  render(): React.ReactNode {
-    const options = this.props.options.map((option, index) => (
-      <Option
-        key={index}
-        onOptionRemoved={() => this.props.onOptionRemoved(index)}
-        value={option}
-      />
-    ));
-    return (
-      <Container>
-        {options}
-        <hr />
-        <NewOptionForm onNewOption={this.props.onNewOption} />
-      </Container>
-    );
-  }
-}
+const Options = (props: Props) => {
+  const options = props.options.map((option, index) => (
+    <Option
+      key={index}
+      onOptionRemoved={() => props.onOptionRemoved(index)}
+      value={option}
+    />
+  ));
+  return (
+    <Container>
+      {options}
+      <hr />
+      <NewOptionForm onNewOption={props.onNewOption} />
+    </Container>
+  );
+};
 
 export default hot(Options);

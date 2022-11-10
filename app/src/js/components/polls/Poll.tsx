@@ -35,26 +35,22 @@ interface Props {
   onVotePoll: () => void;
 }
 
-class Poll extends React.Component<Props> {
-  render(): React.ReactNode {
-    return (
-      <Row>
-        <Title>
-          <span>{this.props.poll.title}</span>
-        </Title>
-        <Cta>
-          <Submit onClick={this.props.onShowResult} text="Show results" />
-        </Cta>
-        <Cta>
-          <Submit
-            onClick={this.props.onVotePoll}
-            text="Vote poll"
-            disabled={this.props.poll.closed}
-          />
-        </Cta>
-      </Row>
-    );
-  }
-}
+const Poll = (props: Props) => (
+  <Row>
+    <Title>
+      <span>{props.poll.title}</span>
+    </Title>
+    <Cta>
+      <Submit onClick={props.onShowResult} text="Show results" />
+    </Cta>
+    <Cta>
+      <Submit
+        onClick={props.onVotePoll}
+        text="Vote poll"
+        disabled={props.poll.closed}
+      />
+    </Cta>
+  </Row>
+);
 
 export default hot(Poll);

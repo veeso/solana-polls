@@ -17,19 +17,15 @@ interface Props {
   width?: string;
 }
 
-class Input extends React.Component<Props> {
-  render(): React.ReactNode {
-    return (
-      <div>
-        <InputText
-          onChange={this.props.onChange}
-          name={this.props.name}
-          value={this.props.value}
-          style={{ width: this.props.width }}
-        />
-      </div>
-    );
-  }
-}
+const Input = (props: Props) => (
+  <div>
+    <InputText
+      onChange={props.onChange}
+      name={props.name}
+      value={props.value}
+      style={{ width: props.width }}
+    />
+  </div>
+);
 
 export default hot(Input);

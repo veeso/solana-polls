@@ -41,55 +41,46 @@ interface States {
   option?: number;
 }
 
-class Vote extends React.Component<Props, States> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleRadioInput = this.handleRadioInput.bind(this);
-  }
-
-  handleSubmit() {
-    if (this.state.option) {
-      this.props.onSubmit(this.state.option);
+const Vote = (props: Props) => {
+  const [option, setOption] = React.useState<number>();
+  const handleSubmit = () => {
+    if (option) {
+      props.onSubmit(option);
     }
-  }
+  };
 
-  handleRadioInput(event: React.FormEvent<EventTarget>) {
+  const handleRadioInput = (event: React.FormEvent<EventTarget>) => {
     const value = (event.target as HTMLInputElement).value;
-    this.setState({ option: parseInt(value) });
-  }
+    setOption(parseInt(value));
+  };
+  const options = props.poll.options.map((option) => (
+    <Radio
+      key={option.id}
+      label={option.text}
+      name="poll-vote"
+      value={option.id.toString()}
+      onChange={handleRadioInput}
+    />
+  ));
 
-  render(): React.ReactNode {
-    const options = this.props.poll.options.map((option) => (
-      <Radio
-        key={option.id}
-        label={option.text}
-        name="poll-vote"
-        value={option.id.toString()}
-        onChange={this.handleRadioInput}
-      />
-    ));
-
-    return (
-      <Container>
-        <Title>{this.props.poll.title}</Title>
-        <RadioContainer>{options}</RadioContainer>
-        <Cta>
-          <Submit
-            onClick={this.handleSubmit}
-            text="Vote poll"
-            disabled={this.state.option === undefined}
-          />
-          <Submit
-            onClick={this.props.onGoBack}
-            text="Go back"
-            icon={<ArrowLeftIcon width={20} />}
-          />
-        </Cta>
-      </Container>
-    );
-  }
-}
+  return (
+    <Container>
+      <Title>{props.poll.title}</Title>
+      <RadioContainer>{options}</RadioContainer>
+      <Cta>
+        <Submit
+          onClick={handleSubmit}
+          text="Vote poll"
+          disabled={option === undefined}
+        />
+        <Submit
+          onClick={props.onGoBack}
+          text="Go back"
+          icon={<ArrowLeftIcon width={20} />}
+        />
+      </Cta>
+    </Container>
+  );
+};
 
 export default hot(Vote);

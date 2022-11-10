@@ -18,15 +18,11 @@ const Loader = styled.div`
   animation: spin 2s linear infinite;
 `;
 
-class Loading extends React.Component {
-  render(): React.ReactNode {
-    return (
-      <Container>
-        <Loader />
-        <h2>Please, wait...</h2>
-      </Container>
-    );
-  }
-}
+const Loading = () => (
+  <Container>
+    <Loader />
+    <h2>Please, wait...</h2>
+  </Container>
+);
 
 export default hot(Loading);

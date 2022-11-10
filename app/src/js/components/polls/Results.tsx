@@ -46,24 +46,13 @@ interface Props {
   votes: Array<Vote>;
 }
 
-interface States {
-  data: any[];
-}
+const Results = (props: Props) => {
+  const [data, setData] = React.useState<any[]>([]);
 
-class Results extends React.Component<Props, States> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { data: [] };
-  }
-
-  componentDidMount(): void {
-    this.setState({ data: this.chartData() });
-  }
-
-  chartData(): any[] {
+  const chartData = (): any[] => {
     let data: any[] = [];
-    this.props.poll.options.map((option) => {
-      const votes = this.props.votes.filter(
+    props.poll.options.map((option) => {
+      const votes = props.votes.filter(
         (vote) => vote.option === option.id
       ).length;
       data.push({
@@ -73,39 +62,39 @@ class Results extends React.Component<Props, States> {
       });
     });
     return data;
-  }
+  };
 
-  render(): React.ReactNode {
-    return (
-      <Container>
-        <Title>{this.props.poll.title}</Title>
-        <ChartContainer>
-          <PieChart
-            data={this.state.data}
-            animate={true}
-            label={({ dataEntry }) =>
-              `${dataEntry.title}  (${dataEntry.value})`
-            }
-            labelStyle={{
-              ...defaultLabelStyle,
-            }}
-          />
-        </ChartContainer>
-        <Cta>
-          <Submit
-            onClick={this.props.onVotePoll}
-            text="Vote poll"
-            disabled={this.props.poll.closed}
-          />
-          <Submit
-            onClick={this.props.onGoBack}
-            text="Go back"
-            icon={<ArrowLeftIcon width={20} />}
-          />
-        </Cta>
-      </Container>
-    );
-  }
-}
+  React.useEffect(() => {
+    setData(chartData());
+  }, []);
+
+  return (
+    <Container>
+      <Title>{props.poll.title}</Title>
+      <ChartContainer>
+        <PieChart
+          data={data}
+          animate={true}
+          label={({ dataEntry }) => `${dataEntry.title}  (${dataEntry.value})`}
+          labelStyle={{
+            ...defaultLabelStyle,
+          }}
+        />
+      </ChartContainer>
+      <Cta>
+        <Submit
+          onClick={props.onVotePoll}
+          text="Vote poll"
+          disabled={props.poll.closed}
+        />
+        <Submit
+          onClick={props.onGoBack}
+          text="Go back"
+          icon={<ArrowLeftIcon width={20} />}
+        />
+      </Cta>
+    </Container>
+  );
+};
 
 export default hot(Results);

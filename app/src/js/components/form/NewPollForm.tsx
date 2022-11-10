@@ -22,59 +22,40 @@ interface Props {
   onSubmit: (title: string, options: Array<string>) => void;
 }
 
-interface States {
-  title: string;
-  options: Array<string>;
-}
+const NewPollForm = (props: Props) => {
+  const [title, setTitle] = React.useState<string>("");
+  const [options, setOptions] = React.useState<Array<string>>([]);
 
-class NewPollForm extends React.Component<Props, States> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      title: "",
-      options: new Array(),
-    };
-    this.handleOnTitleChange = this.handleOnTitleChange.bind(this);
-    this.handleOnNewOption = this.handleOnNewOption.bind(this);
-    this.handleOnOptionRemoved = this.handleOnOptionRemoved.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-  }
+  const handleOnTitleChange = (event: React.FormEvent<EventTarget>) => {
+    setTitle((event.target as HTMLInputElement).value);
+  };
 
-  handleOnTitleChange(event: React.FormEvent<EventTarget>) {
-    this.setState({ title: (event.target as HTMLInputElement).value });
-  }
+  const handleOnNewOption = (text: string) => {
+    setOptions([...options, text]);
+  };
 
-  handleOnNewOption(text: string) {
-    let options = this.state.options;
-    options.push(text);
-    this.setState({ options });
-  }
-
-  handleOnOptionRemoved(index: number) {
-    let options = this.state.options;
+  const handleOnOptionRemoved = (index: number) => {
     options.splice(index, 1);
-    this.setState({ options });
-  }
+    setOptions([...options]);
+  };
 
-  handleFormSubmit() {
-    this.props.onSubmit(this.state.title, this.state.options);
-  }
+  const handleFormSubmit = () => {
+    props.onSubmit(title, options);
+  };
 
-  render(): React.ReactNode {
-    return (
-      <Form>
-        <FormTitle>Create new poll</FormTitle>
-        <Title onChange={this.handleOnTitleChange} value={this.state.title} />
-        <Options
-          onNewOption={this.handleOnNewOption}
-          onOptionRemoved={this.handleOnOptionRemoved}
-          options={this.state.options}
-        />
-        <hr />
-        <Submit onClick={this.handleFormSubmit} text="Submit" />
-      </Form>
-    );
-  }
-}
+  return (
+    <Form>
+      <FormTitle>Create new poll</FormTitle>
+      <Title onChange={handleOnTitleChange} value={title} />
+      <Options
+        onNewOption={handleOnNewOption}
+        onOptionRemoved={handleOnOptionRemoved}
+        options={options}
+      />
+      <hr />
+      <Submit onClick={handleFormSubmit} text="Submit" />
+    </Form>
+  );
+};
 
 export default hot(NewPollForm);

@@ -19,20 +19,16 @@ interface Props {
   onChange?: (event: React.FormEvent<EventTarget>) => void;
 }
 
-class Radio extends React.Component<Props> {
-  render(): React.ReactNode {
-    return (
-      <RadioContainer>
-        <InputRadio
-          type="radio"
-          name={this.props.name}
-          value={this.props.value}
-          onClick={this.props.onChange}
-        />
-        <RadioLabel htmlFor={this.props.name}>{this.props.label}</RadioLabel>
-      </RadioContainer>
-    );
-  }
-}
+const Radio = (props: Props) => (
+  <RadioContainer>
+    <InputRadio
+      type="radio"
+      name={props.name}
+      value={props.value}
+      onClick={props.onChange}
+    />
+    <RadioLabel htmlFor={props.name}>{props.label}</RadioLabel>
+  </RadioContainer>
+);
 
 export default hot(Radio);
