@@ -37,10 +37,6 @@ interface Props {
   onGoBack: () => void;
 }
 
-interface States {
-  option?: number;
-}
-
 const Vote = (props: Props) => {
   const [option, setOption] = React.useState<number>();
   const handleSubmit = () => {

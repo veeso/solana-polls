@@ -15,11 +15,7 @@ import {
   TorusWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
 
-const config = {
-  solana_polls_account: "",
-  network: "devnet",
-  endpoint: "https://api.devnet.solana.com",
-};
+import config from "../../config";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
 

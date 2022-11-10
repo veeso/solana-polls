@@ -17,10 +17,6 @@ interface Props {
   onNewOption: (text: string) => void;
 }
 
-interface States {
-  option: string;
-}
-
 const NewOptionForm = (props: Props) => {
   const [option, setOption] = React.useState<string>("");
 

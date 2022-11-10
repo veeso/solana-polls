@@ -1,7 +1,14 @@
 import * as React from "react";
 import { hot } from "react-hot-loader/root";
 import styled from "styled-components";
+import { useConnection, useAnchorWallet } from "@solana/wallet-adapter-react";
+import * as anchor from "@project-serum/anchor";
+import { Program, AnchorProvider, web3 } from "@project-serum/anchor";
+import { PublicKey } from "@solana/web3.js";
 
+import { IDL } from "../../solana_polls";
+import idl from "../../solana_polls.json";
+import config from "../../config";
 import Poll from "../components/polls/Poll";
 import Vote from "../components/polls/Vote";
 import PollEntity from "../lib/poll";
@@ -19,11 +26,11 @@ enum PageState {
   Results,
   Vote,
 }
-interface States {
-  polls: Array<PollEntity>;
-  votes: Map<number, Array<VoteEntity>>;
-  selectedPoll: number | null;
-  pageState: PageState;
+
+const programID = new PublicKey(idl.metadata.address);
+
+interface OpenType {
+  [key: string]: any;
 }
 
 const Polls = () => {
@@ -34,55 +41,45 @@ const Polls = () => {
   const [selectedPoll, setSelectedPoll] = React.useState<number | null>(null);
   const [pageState, setPageState] = React.useState<PageState>(PageState.Polls);
 
-  const loadPolls = () => {
-    setPolls([
-      {
-        id: 0,
-        title: "If you had 10,000$, what crypto would you invest in?",
-        closed: false,
-        options: [
-          { id: 0, text: "BTC" },
-          { id: 1, text: "ETH" },
-          { id: 2, text: "SOL" },
-          { id: 3, text: "DOGE" },
-          { id: 4, text: "MATIC" },
-        ],
-      },
-      {
-        id: 1,
-        title: "What is the best programming language to learn in 2023?",
-        closed: true,
-        options: [
-          { id: 0, text: "Rust" },
-          { id: 1, text: "Go" },
-          { id: 2, text: "Solidity" },
-          { id: 3, text: "Elm" },
-          { id: 4, text: "Typescript" },
-        ],
-      },
-    ]);
-    //TODO: load from blockchain
+  const wallet = useAnchorWallet();
+  const { connection } = useConnection();
+
+  const loadPolls = async () => {
+    const provider = new AnchorProvider(
+      connection,
+      wallet as anchor.Wallet,
+      {}
+    );
+    const program = new Program(IDL, programID, provider);
+    const data = await program.account.data.fetch(config.solana_polls_account);
+    setPolls(
+      (data.polls as Array<OpenType>).map((poll) => ({
+        id: poll.id,
+        title: poll.title,
+        options: poll.option.map((option: OpenType) => ({
+          id: option.id,
+          text: option.text,
+        })),
+        closed: poll.closed,
+      }))
+    );
   };
 
-  const loadVotes = (pollId: number) => {
-    let newVotes = votes;
-    let availableOptions = polls
-      .find((poll) => poll.id === pollId)
-      ?.options.reduce((prev, current) => {
-        if (prev.id < current.id) {
-          return current;
-        }
-        return prev;
-      }).id;
-    availableOptions = availableOptions ? availableOptions + 1 : 0;
-    let votedOptions = [];
-    for (let i = 0; i < 50; i++) {
-      votedOptions.push({
-        option: Math.floor(Math.random() * availableOptions),
-      });
-    }
-    newVotes.set(pollId, votedOptions);
-    // TODO: load from blockchain
+  const loadVotes = async (pollId: number) => {
+    const provider = new AnchorProvider(
+      connection,
+      wallet as anchor.Wallet,
+      {}
+    );
+    const program = new Program(IDL, programID, provider);
+    const data = await program.account.data.fetch(config.solana_polls_account);
+    const pollVotes: Array<VoteEntity> = (data.votes as Array<OpenType>)
+      .filter((vote) => vote.poll_id === pollId)
+      .map((vote) => ({
+        option: vote.option,
+      }));
+    const newVotes = new Map(votes);
+    newVotes.set(pollId, pollVotes);
     setVotes(newVotes);
   };
 
@@ -90,7 +87,7 @@ const Polls = () => {
     console.log(`show results for ${pollId}`);
     // load votes if unloaded
     if (!votes.has(pollId)) {
-      loadVotes(pollId);
+      loadVotes(pollId).catch(console.error);
     }
     setSelectedPoll(pollId);
     setPageState(PageState.Results);
@@ -107,8 +104,27 @@ const Polls = () => {
     setPageState(PageState.Polls);
   };
 
-  const handleVoteSubmit = (option: number) => {
+  const handleVoteSubmit = async (option: number) => {
     console.log(`voted for option ${option}`);
+    if (wallet && selectedPoll) {
+      const provider = new AnchorProvider(
+        connection,
+        wallet as anchor.Wallet,
+        {}
+      );
+      const program = new Program(IDL, programID, provider);
+      await program.methods
+        .vote(selectedPoll, option)
+        .accounts({
+          data: config.solana_polls_account,
+          voter: wallet.publicKey,
+        })
+        .rpc()
+        .then(() => {
+          console.log("vote submitted");
+        })
+        .catch(console.error);
+    }
   };
 
   const loadResultVotes = (): Array<VoteEntity> => {
@@ -190,8 +206,10 @@ const Polls = () => {
   };
 
   React.useEffect(() => {
-    loadPolls();
-  }, []);
+    if (wallet) {
+      loadPolls();
+    }
+  }, [wallet]);
 
   return <Container>{componentToRender()}</Container>;
 };

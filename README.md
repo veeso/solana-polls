@@ -49,9 +49,12 @@ These are the steps required to get started with Solana:
 
 ### Environment
 
-1. Setup Solana devnet
+1. Setup Solana devnet or localhost
 
-    ```solana config set --url devnet```
+    ```sh
+    solana config set --url devnet
+    solana config set --url localhost
+    ```
 
 2. Create test wallet
 
@@ -60,6 +63,10 @@ These are the steps required to get started with Solana:
 3. Give yourself some coins
 
     ```solana airdrop 2```
+
+4. Deploy
+
+    ```anchor deploy```
 
 ### Testing
 
