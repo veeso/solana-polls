@@ -1,7 +1,11 @@
 import * as React from "react";
 import { hot } from "react-hot-loader/root";
 import styled from "styled-components";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import {
+  WalletDisconnectButton,
+  WalletMultiButton,
+  WalletModalProvider,
+} from "@solana/wallet-adapter-react-ui";
 
 import Link from "./menu/Link";
 import Logo from "./menu/Logo";
@@ -36,6 +40,9 @@ const LinkSection = styled.div`
 `;
 
 const WalletSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
   padding: 0 24px;
   text-align: right;
 `;
@@ -52,8 +59,11 @@ class Menu extends React.Component {
           <Link route="" text="Polls"></Link>
           <Link route="new" text="New poll"></Link>
         </LinkSection>
-        <WalletSection>
-          <WalletMultiButton />
+        <WalletSection className="wallet-connect">
+          <WalletModalProvider>
+            <WalletMultiButton />
+            <WalletDisconnectButton />
+          </WalletModalProvider>
         </WalletSection>
       </Header>
     );

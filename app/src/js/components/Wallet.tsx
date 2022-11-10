@@ -14,7 +14,6 @@ import {
   SolletWalletAdapter,
   TorusWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
-import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 
 const config = {
   solana_polls_account: "",
@@ -44,7 +43,7 @@ class Wallet extends React.Component<Props> {
     return (
       <ConnectionProvider endpoint={config.endpoint}>
         <WalletProvider wallets={wallets} autoConnect>
-          <WalletModalProvider>{this.props.children}</WalletModalProvider>
+          {this.props.children}
         </WalletProvider>
       </ConnectionProvider>
     );
